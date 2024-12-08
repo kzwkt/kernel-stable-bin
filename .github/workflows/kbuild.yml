@@ -1,0 +1,41 @@
+name: Clone Custom Kernel and Push
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  clone:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git
+
+      - name: Clone Linux Kernel Source
+        run: |
+          # Clone the kernel source into the root directory if it doesn't already exist
+          if [ ! -d "linux" ]; then
+            git clone https://github.com/torvalds/linux.git
+            cd linux
+            git checkout v6.12  # Replace with the latest stable version tag or keep it up to date
+          fi
+
+      - name: Commit and Push Kernel to Repository
+        run: |
+          # Commit the cloned kernel source and push it back to the repository
+          cd linux
+          git add .
+          git commit -m "Add Linux kernel source"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
