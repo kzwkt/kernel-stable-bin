@@ -25,9 +25,7 @@ jobs:
         run: |
           # Clone the kernel source into the root directory if it doesn't already exist
           if [ ! -d "linux" ]; then
-            git clone https://github.com/torvalds/linux.git --depth=1
-            cd linux
-            git checkout v6.12  # Replace with the latest stable version tag or keep it up to date
+            git clone https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git  --depth=1
           fi
 
       - name: Commit and Push Kernel to Repository
