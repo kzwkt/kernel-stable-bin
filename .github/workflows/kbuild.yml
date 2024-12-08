@@ -27,6 +27,11 @@ jobs:
           if [ ! -d "linux" ]; then
             git clone https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git  --depth=1
           fi
+      
+      - name: Set Git Author Identity
+        run: |
+          git config user.email "9437935+kzwkt@users.noreply.github.com"  # Replace with your email
+          git config user.name "kzwkt"         # Replace with your name
 
       - name: Commit and Push Kernel to Repository
         run: |
