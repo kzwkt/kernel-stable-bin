@@ -1,10 +1,10 @@
-name: Run on .config Change
+name: Run on .config or kernel-url Change
 
 on:
   push:
     paths:
       - ".config"
-      - "kernel-url" 
+      - "kernel-url"
 
 jobs:
   process-config:
@@ -16,34 +16,38 @@ jobs:
 
       - name: Log Change
         run: |
-          echo "The .config file has been modified. Processing changes..."
+          echo "The .config or kernel-url file has been modified. Processing changes..."
          
-      - name: Install wget
+      - name: Install wget and dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget
-          wget -i kernel-url
-     
-      - name: Get Downloaded File Name
-        id: get-filename
+          sudo apt-get install -y wget tar
+
+      - name: Download and Extract Kernel Tarball
         run: |
-          # Extract the file name from the URL
           KERNEL_URL=$(cat kernel-url)
+          wget -N "$KERNEL_URL"
           FILE_NAME=$(basename "$KERNEL_URL")
-          echo "file_name=$FILE_NAME" >> $GITHUB_ENV
+          tar -xf "$FILE_NAME"
+        
+      - name: Get Extracted Folder Name
+        id: get-folder-name
+        run: |
+          EXTRACTED_FOLDER=$(basename "$FILE_NAME" .tar.xz)
+          echo "extracted_folder=$EXTRACTED_FOLDER" >> $GITHUB_ENV
 
       - name: Configure Git User
         run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "actions@github.com"
+          git config user.name "Linus Torvalds"  # Cool-sounding username
+          git config user.email "linus@kernel.org"  # Fictional email for Linus Torvalds
 
-      - name: Push Downloaded Kernel File
+      - name: Add and Commit Extracted Kernel Folder
         run: |
-          # Add the dynamically named file
-          git add ${{ env.file_name }}
-          git commit -m "Add latest kernel tarball: ${{ env.file_name }}"
+          git add ${{ env.extracted_folder }}
+          git commit -m "Add extracted kernel folder: ${{ env.extracted_folder }}"
 
-          # Push changes to the repository
+      - name: Push Extracted Kernel Folder
+        run: |
           git push origin HEAD
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}       
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
