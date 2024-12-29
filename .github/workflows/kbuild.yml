@@ -1,44 +1,18 @@
-name: Clone Custom Kernel and Push
+name: Run on .config Change
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    paths:
+      - ".config"
 
 jobs:
-  clone:
+  process-config:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install Dependencies
+      - name: Log Change
         run: |
-          sudo apt-get update
-          sudo apt-get install -y git
-
-      - name: Clone Linux Kernel Source
-        run: |
-          # Clone the kernel source into the root directory if it doesn't already exist
-          if [ ! -d "linux" ]; then
-            git clone https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git --depth=1
-          fi
-      
-      - name: Set Git Author Identity
-        run: |
-          git config --global user.email "9437935+kzwkt@users.noreply.github.com"  # Replace with your email
-          git config --global user.name "kzwkt"         # Replace with your name
-
-      - name: Commit and Push Kernel to Repository
-        run: |
-          # Commit the cloned kernel source and push it back to the repository
-          cd linux
-          git add .
-          git commit -m "Add Linux kernel source"
-          git push origin main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo "The .config file has been modified. Processing changes..."
