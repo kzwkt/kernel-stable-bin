@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - ".config"
+      - "kernel-url" 
 
 jobs:
   process-config:
@@ -16,3 +17,10 @@ jobs:
       - name: Log Change
         run: |
           echo "The .config file has been modified. Processing changes..."
+         
+      - name: Install wget
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget
+          wget -i kernel-url
+          
