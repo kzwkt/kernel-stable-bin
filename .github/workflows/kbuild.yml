@@ -22,32 +22,15 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y wget tar
-
-      - name: Download and Extract Kernel Tarball
-        run: |
-          KERNEL_URL=$(cat kernel-url)
-          wget -N "$KERNEL_URL"
-          FILE_NAME=$(basename "$KERNEL_URL")
-          tar -xf "$FILE_NAME"
-        
-      - name: Get Extracted Folder Name
-        id: get-folder-name
-        run: |
-          EXTRACTED_FOLDER=$(basename "$FILE_NAME" .tar.xz)
-          echo "extracted_folder=$EXTRACTED_FOLDER" >> $GITHUB_ENV
-
-      - name: Configure Git User
-        run: |
           git config user.name "Linus Torvalds"  # Cool-sounding username
           git config user.email "linus@kernel.org"  # Fictional email for Linus Torvalds
 
-      - name: Add and Commit Extracted Kernel Folder
+      - name: download and push kernel
         run: |
-          git add ${{ env.extracted_folder }}
-          git commit -m "Add extracted kernel folder: ${{ env.extracted_folder }}"
-
-      - name: Push Extracted Kernel Folder
-        run: |
+          wget -i kernel-url -O kernel.tar.xz
+          tar -xf kernel.tar.xz
+          git add kernel
+          git commit -m "push kernel"
           git push origin HEAD
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
