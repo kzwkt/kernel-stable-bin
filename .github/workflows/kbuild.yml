@@ -27,8 +27,10 @@ jobs:
 
       - name: download and push kernel
         run: |
+          cd
+          pwd
           wget -i kernel-url -O kernel.tar.xz
-          tar -xf kernel.tar.xz
+          tar -xvf kernel.tar.xz
           git add ./kernel
           git commit -m "push kernel"
           git push origin HEAD
