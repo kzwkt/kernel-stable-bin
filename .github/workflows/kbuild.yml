@@ -23,4 +23,27 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y wget
           wget -i kernel-url
-          
+     
+      - name: Get Downloaded File Name
+        id: get-filename
+        run: |
+          # Extract the file name from the URL
+          KERNEL_URL=$(cat kernel-url)
+          FILE_NAME=$(basename "$KERNEL_URL")
+          echo "file_name=$FILE_NAME" >> $GITHUB_ENV
+
+      - name: Configure Git User
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+
+      - name: Push Downloaded Kernel File
+        run: |
+          # Add the dynamically named file
+          git add ${{ env.file_name }}
+          git commit -m "Add latest kernel tarball: ${{ env.file_name }}"
+
+          # Push changes to the repository
+          git push origin HEAD
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}       
