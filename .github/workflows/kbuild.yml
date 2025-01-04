@@ -1,0 +1,60 @@
+name: Run on .config or kernel-url Change
+
+on:
+  push:
+    paths:
+      - "runner"
+
+jobs:
+  process-config:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log Change
+        run: |
+          echo "The .config or kernel-url file has been modified. Processing changes..."
+
+      - name: Install wget and dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget tar libncurses-dev bison flex libssl-dev libelf-dev bc zstd unzip
+
+      # Cache the 'kext' directory to avoid re-downloading and extracting kernel on subsequent runs
+      - name: Cache kernel and firmware
+        uses: actions/cache@v4.2.0
+        with:
+          path: kext/
+          key: ${{ runner.os }}-kext-${{ hashFiles('kext/**') }}
+          restore-keys: |
+            ${{ runner.os }}-kext-
+
+      # Download kernel and firmware files, extract and build
+      - name: Download, extract and build kernel
+        run: |
+          if [ ! -f "kext/arch/x86/boot/bzImage" ]; then
+            # If the kernel hasn't been built or cached, proceed with download and build
+            wget -q -i kernel-url -O kernel.tar.xz
+            mkdir -p kext
+            tar -xf kernel.tar.xz -C kext --strip-components=1
+            cp .config kext/
+
+            # Download firmware (ensure the URL is correct)
+            wget https://github.com/kzwkt/inspiron-351-fw/archive/refs/heads/main.zip
+            unzip -q main.zip -d kext/
+
+            # Build the kernel
+            cd kext
+            make -j$(nproc)
+          else
+            echo "Kernel already built. Skipping download and build."
+          fi
+
+      # Upload the kernel artifact
+      - name: Upload kernel
+        uses: actions/upload-artifact@v3
+        with:
+          name: kernel-bzImage
+          path: kext/arch/x86/boot/bzImage
