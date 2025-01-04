@@ -54,7 +54,7 @@ jobs:
 
       # Upload the kernel artifact
       - name: Upload kernel
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: kernel-bzImage
           path: kext/arch/x86/boot/bzImage
