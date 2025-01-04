@@ -22,35 +22,37 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y wget tar libncurses-dev bison flex libssl-dev libelf-dev bc zstd unzip
 
-      # Cache the 'kext' directory to avoid re-downloading and extracting kernel on subsequent runs
-      - name: Cache kernel and firmware
+      # Cache the 'kext' directory to avoid re-downloading kernel on each run
+      - name: Cache kernel source
         uses: actions/cache@v4.2.0
         with:
           path: kext/
-          key: ${{ runner.os }}-kext-${{ hashFiles('kext/**') }}
+          key: ${{ runner.os }}-kext-${{ hashFiles('kernel-url') }}
           restore-keys: |
             ${{ runner.os }}-kext-
 
-      # Download kernel and firmware files, extract and build
-      - name: Download, extract and build kernel
+      # Download, extract, and build kernel, always running make
+      - name: Download, extract, and build kernel
         run: |
-          if [ ! -f "kext/arch/x86/boot/bzImage" ]; then
-            # If the kernel hasn't been built or cached, proceed with download and build
+          # Download the kernel source only if it's not cached
+          if [ ! -d "kext" ]; then
             wget -q -i kernel-url -O kernel.tar.xz
             mkdir -p kext
             tar -xf kernel.tar.xz -C kext --strip-components=1
-            cp .config kext/
+          fi
 
-            # Download firmware (ensure the URL is correct)
+          # Copy the .config file and update configuration
+          cp .config kext/
+          cd kext
+
+          # Download firmware if necessary
+          if [ ! -f "inspiron-351-fw-main" ]; then
             wget https://github.com/kzwkt/inspiron-351-fw/archive/refs/heads/main.zip
             unzip -q main.zip -d kext/
-
-            # Build the kernel
-            cd kext
-            make -j$(nproc)
-          else
-            echo "Kernel already built. Skipping download and build."
           fi
+
+          # Run make every time, even if cached
+          make -j$(nproc)
 
       # Upload the kernel artifact
       - name: Upload kernel
