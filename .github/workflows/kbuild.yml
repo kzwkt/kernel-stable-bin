@@ -45,7 +45,7 @@ jobs:
           cp .config kext/
           # copy firmware if necessary
           if [ ! -f "fw" ]; then
-           rsync -av fw/ kext/
+           rsync -av fw kext/
           fi
           cd kext
           
