@@ -43,6 +43,7 @@ jobs:
 
           # Copy the .config file and update configuration
           cp .config kext/
+          cp -r fw kext/
           cd kext
 
           # Download firmware if necessary
