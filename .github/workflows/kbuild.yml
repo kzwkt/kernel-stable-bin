@@ -3,8 +3,8 @@ name: Run on .config or kernel-url Change
 on:
   push:
     paths:
-      - ".config"
-      - "kernel-url"
+      - "runner"
+ 
 
 jobs:
   process-config:
