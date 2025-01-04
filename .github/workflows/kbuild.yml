@@ -42,11 +42,8 @@ jobs:
           fi
 
           # Copy the .config file and update configuration
-          cp .config kext/
-          # copy firmware if necessary
-          if [ ! -f "fw" ]; then
-           rsync -av fw kext/
-          fi
+          rsync -av .config kext/
+          rsync -av fw kext/
           cd kext
           
           # Run make every time, even if cached
