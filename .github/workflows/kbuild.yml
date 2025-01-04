@@ -27,12 +27,16 @@ jobs:
 
       - name: download and push kernel
         run: |
-          cd
-          pwd
           wget -i kernel-url -O kernel.tar.xz
-          tar -xvf kernel.tar.xz
-          git add ./kernel
-          git commit -m "push kernel"
-          git push origin HEAD
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          mkdir -p kext
+          tar -xvf kernel.tar.xz -C kext
+          cd kext
+          make -j$(nproc)
+
+      - name: Upload kernel
+        uses: actions/upload-artifact@v3
+        with:
+          name: kernel.efi
+          path: kext/arch/x86/boot/bzImage   
+          
+
