@@ -22,14 +22,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y wget tar
-          git config user.name "Linus Torvalds"  # Cool-sounding username
-          git config user.email "linus@kernel.org"  # Fictional email for Linus Torvalds
 
       - name: download and push kernel
         run: |
-          wget -i kernel-url -O kernel.tar.xz
+          wget -q -i kernel-url -O kernel.tar.xz
           mkdir -p kext
-          tar -xvf kernel.tar.xz -C kext
+          tar -xf kernel.tar.xz -C kext --strip-components=1
+          cp .config kext/
           cd kext
           make -j$(nproc)
 
