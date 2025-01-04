@@ -20,7 +20,7 @@ jobs:
       - name: Install wget and dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget tar libncurses-dev bison flex libssl-dev libelf-dev bc zstd unzip
+          sudo apt-get install -y wget tar libncurses-dev bison flex libssl-dev libelf-dev bc zstd unzip rsync
 
       # Cache the 'kext' directory to avoid re-downloading kernel on each run
       - name: Cache kernel source
@@ -43,13 +43,12 @@ jobs:
 
           # Copy the .config file and update configuration
           cp .config kext/
-          cp -r fw kext/
+          
           cd kext
 
-          # Download firmware if necessary
-          if [ ! -f "inspiron-351-fw-main" ]; then
-            wget https://github.com/kzwkt/inspiron-351-fw/archive/refs/heads/main.zip
-            unzip -q main.zip -d kext/
+          # copy firmware if necessary
+          if [ ! -f "fw" ]; then
+           rsync -av fw kext/
           fi
 
           # Run make every time, even if cached
