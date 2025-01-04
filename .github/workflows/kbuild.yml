@@ -15,7 +15,7 @@ jobs:
 
       - name: Log Change
         run: |
-          echo "The .config or kernel-url file has been modified. Processing changes..."
+          echo "runner has been modified. Processing changes..."
 
       - name: Install wget and dependencies
         run: |
