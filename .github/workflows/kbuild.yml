@@ -30,6 +30,11 @@ jobs:
           key: ${{ runner.os }}-kext-${{ hashFiles('kernel-url') }}
           restore-keys: |
             ${{ runner.os }}-kext-
+              enableCrossOsArchive: false
+              fail-on-cache-miss: false
+              lookup-only: false  
+              save-always: false
+              if: steps.cache-check.outcome == 'success'
 
       # Download, extract, and build kernel, always running make
       - name: Download, extract, and build kernel
