@@ -22,15 +22,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y wget tar libncurses-dev bison flex libssl-dev libelf-dev bc zstd unzip rsync
 
-      # Cache the 'kext' directory to avoid re-downloading kernel on each run
-      - name: Cache kernel source
-        uses: actions/cache@v4.2.0
-        with:
-          path: kext/
-          key: ${{ runner.os }}-kext-${{ github.sha }}-${{ hashFiles('kernel-url') }}
-          restore-keys: |
-            ${{ runner.os }}-kext-
-        continue-on-error: true  # This allows the job to continue even if cache is not found
 
       # Download, extract, and build kernel, always running make
       - name: Download, extract, and build kernel
