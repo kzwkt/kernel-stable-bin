@@ -27,7 +27,7 @@ jobs:
         uses: actions/cache@v4.2.0
         with:
           path: kext/
-          key: ${{ runner.os }}-kext-${{ hashFiles('kernel-url') }}
+          key: ${{ runner.os }}-kext-${{ github.sha }}-${{ hashFiles('kernel-url') }}
           restore-keys: |
             ${{ runner.os }}-kext-
         continue-on-error: true  # This allows the job to continue even if cache is not found
