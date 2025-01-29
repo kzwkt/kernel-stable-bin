@@ -39,7 +39,8 @@ jobs:
           cd kext
           
           # Run make every time, even if cached
-          make -j$(nproc) olddefconfig
+          make  olddefconfig
+          make -j$(nproc)
 
       - name: Set dynamic tag version
         run: |
