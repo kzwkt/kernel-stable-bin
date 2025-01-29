@@ -30,11 +30,7 @@ jobs:
           key: ${{ runner.os }}-kext-${{ hashFiles('kernel-url') }}
           restore-keys: |
             ${{ runner.os }}-kext-
-              enableCrossOsArchive: false
-              fail-on-cache-miss: false
-              lookup-only: false  
-              save-always: false
-              if: steps.cache-check.outcome == 'success'
+        continue-on-error: true  # This allows the job to continue even if cache is not found
 
       # Download, extract, and build kernel, always running make
       - name: Download, extract, and build kernel
@@ -54,11 +50,10 @@ jobs:
           # Run make every time, even if cached
           make -j$(nproc) olddefconfig
 
-      
       - name: Set dynamic tag version
         run: |
           # Generate a dynamic tag using commit SHA or other unique identifier
-          VERSION="v$(date +'%Y%m%d%H%M%S')"  # Format: vYYYYMMDDHHMMSS>
+          VERSION="v$(date +'%Y%m%d%H%M%S')"  # Format: vYYYYMMDDHHMMSS
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
       - name: Create a new GitHub release and tag
@@ -70,4 +65,4 @@ jobs:
           files: |
             kext/arch/x86/boot/bzImage
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
