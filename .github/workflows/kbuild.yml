@@ -47,11 +47,22 @@ jobs:
           cd kext
           
           # Run make every time, even if cached
-          make -j$(nproc)
+          make -j$(nproc) olddefconfig
 
-      # Upload the kernel artifact
-      - name: Upload kernel
-        uses: actions/upload-artifact@v4
+      
+      - name: Set dynamic tag version
+        run: |
+          # Generate a dynamic tag using commit SHA or other unique identifier
+          VERSION="v$(date +'%Y%m%d%H%M%S')"  # Format: vYYYYMMDDHHMMSS>
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+
+      - name: Create a new GitHub release and tag
+        uses: softprops/action-gh-release@v2
         with:
-          name: kernel-bzImage
-          path: kext/arch/x86/boot/bzImage
+          tag_name: ${{ env.VERSION }}
+          name: "Release ${{ env.VERSION }}"
+          body: "This release includes the latest build for Debian rootfs."
+          files: |
+            kext/arch/x86/boot/bzImage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
