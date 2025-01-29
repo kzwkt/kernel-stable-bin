@@ -53,7 +53,7 @@ jobs:
         with:
           tag_name: ${{ env.VERSION }}
           name: "Release ${{ env.VERSION }}"
-          body: "This release includes the latest build for Debian rootfs."
+          body: "This release includes the latest build stable kernel."
           files: |
             kext/arch/x86/boot/bzImage
         env:
