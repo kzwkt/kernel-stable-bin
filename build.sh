@@ -9,5 +9,4 @@ rsync -av fw kext/
 cd kext
 make  olddefconfig
 make -j$(nproc)
-version=$(cat kernel-url | sed -E 's/.*linux-([0-9]+\.[0-9]+\.[0-9]+)\.tar\.xz/\1/')
-echo "VERSION=${version}" >> $GITHUB_ENV
+
