@@ -12,12 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Install wget and dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget tar libncurses-dev bison flex libssl-dev libelf-dev bc zstd unzip rsync
-
-      - name: Download, extract, and build kernel
+  
+      - name: install deps Download, extract, and build kernel
         run: |
           bash build.sh
 
