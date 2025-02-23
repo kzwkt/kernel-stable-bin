@@ -17,11 +17,6 @@ jobs:
         run: |
           bash build.sh
 
-      - name: Set dynamic tag version
-        run: |
-          VERSION="v$(date +'%Y%m%d%H%M%S')"  # Format: vYYYYMMDDHHMMSS
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
-
       - name: Create a new GitHub release and tag
         uses: softprops/action-gh-release@v2
         with:
