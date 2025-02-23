@@ -12,39 +12,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Log Change
-        run: |
-          echo "runner has been modified. Processing changes..."
-
       - name: Install wget and dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y wget tar libncurses-dev bison flex libssl-dev libelf-dev bc zstd unzip rsync
 
-
-      # Download, extract, and build kernel, always running make
       - name: Download, extract, and build kernel
         run: |
-          # Download the kernel source only if it's not cached
-          if [ ! -d "kext" ]; then
-            wget -q -i kernel-url -O kernel.tar.xz
-            mkdir -p kext
-            tar -xf kernel.tar.xz -C kext --strip-components=1
-          fi
-
-          # Copy the .config file and update configuration
-          rsync -av .config kext/
-          rsync -av fw kext/
-          cd kext
-          
-          # Run make every time, even if cached
-          make  olddefconfig
-          make -j$(nproc)
+          bash build.sh
 
       - name: Set dynamic tag version
         run: |
-          # Generate a dynamic tag using commit SHA or other unique identifier
           VERSION="v$(date +'%Y%m%d%H%M%S')"  # Format: vYYYYMMDDHHMMSS
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
