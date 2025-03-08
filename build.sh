@@ -1,5 +1,5 @@
 sudo apt-get update
-sudo apt-get install -y wget tar libncurses-dev bison flex libssl-dev libelf-dev bc zstd unzip rsync clang llvm ld binutils
+sudo apt-get install -y wget tar libncurses-dev bison flex libssl-dev libelf-dev bc zstd unzip rsync clang llvm ldd binutils
 
 wget -q -i kernel-url -O kernel.tar.xz
 mkdir -p kext
