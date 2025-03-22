@@ -1,7 +1,7 @@
 ver=6.13.7
 echo $ver > ver
 kernel-url="https://cdn.kernel.org/pub/linux/kernel/v${ver%%.*}.x/linux-$ver.tar.xz"
-hardened-patch="https://github.com/anthraxx/linux-hardened/releases/download/v$ver-hardened1/linux-hardened-v$ver-hardened1.patch
+hardened-patch="https://github.com/anthraxx/linux-hardened/releases/download/v$ver-hardened1/linux-hardened-v$ver-hardened1.patch"
 
 
 pt-get update
