@@ -5,7 +5,7 @@ hardened_patch="https://github.com/anthraxx/linux-hardened/releases/download/v$v
 
 
 apt-get update
-sudo apt-get install -y wget tar libncurses-dev bison flex libssl-dev libelf-dev bc zstd unzip  binutils
+sudo apt-get install -y wget tar libncurses-dev bison flex libssl-dev libelf-dev bc zstd unzip  binutils --no-install-recommends
 
 wget  $kernel_url -O kernel.tar.xz
 mkdir -p kext
