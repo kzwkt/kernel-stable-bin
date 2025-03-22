@@ -4,7 +4,7 @@ kernel_url="https://cdn.kernel.org/pub/linux/kernel/v${ver%%.*}.x/linux-$ver.tar
 hardened_patch="https://github.com/anthraxx/linux-hardened/releases/download/v$ver-hardened1/linux-hardened-v$ver-hardened1.patch"
 
 
-pt-get update
+apt-get update
 sudo apt-get install -y wget tar libncurses-dev bison flex libssl-dev libelf-dev bc zstd unzip  binutils
 
 wget  $kernel_url -O kernel.tar.xz
