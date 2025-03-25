@@ -3,7 +3,7 @@ name: Run on .config or kernel-url Change
 on:
   push:
     paths:
-      - "runner"
+      - "build.sh"
 
 jobs:
   process-config:
