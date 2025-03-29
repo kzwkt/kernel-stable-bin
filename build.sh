@@ -3,7 +3,7 @@ echo $ver > ver
 kernel_url="https://cdn.kernel.org/pub/linux/kernel/v${ver%%.*}.x/linux-$ver.tar.xz"
 
 
-apt-get update
+sudo apt-get update
 sudo apt-get install -y wget tar libncurses-dev bison flex libssl-dev libelf-dev bc zstd unzip  binutils --no-install-recommends
 
 wget  $kernel_url -O kernel.tar.xz
