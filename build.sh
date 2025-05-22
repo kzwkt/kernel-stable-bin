@@ -13,5 +13,9 @@ cp  .config kext/
 cp -r fw kext/
 cd kext
 make  olddefconfig 
+
+export KCFLAGS="-O2 -march=icelake-client"
+export KCPPFLAGS="-march=icelake-client"
+
 make -j$(nproc) 
 
