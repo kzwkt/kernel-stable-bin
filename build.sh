@@ -8,7 +8,7 @@ sudo apt-get install -y wget tar libncurses-dev bison flex libssl-dev libelf-dev
 
 wget  $kernel_url -O kernel.tar.xz
 mkdir -p kext
-tar -xf kernel.tar.xz -C kext --strip-componentse=1
+tar -xf kernel.tar.xz -C kext --strip-components=1
 cp  .config kext/
 cp -r fw kext/
 cd kext
