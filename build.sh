@@ -11,9 +11,10 @@ mkdir -p kext
 tar -xf kernel.tar.xz -C kext --strip-components=1
 cp  .config kext/
 cp -r fw kext/
+wget -O fw/regulatory.db https://git.kernel.org/pub/scm/linux/kernel/git/wens/wireless-regdb.git/plain/regulatory.db
+wget -O fw/regulatory.db.p7s https://git.kernel.org/pub/scm/linux/kernel/git/wens/wireless-regdb.git/plain/regulatory.db.p7s
 cd kext
-wget https://git.kernel.org/pub/scm/linux/kernel/git/wens/wireless-regdb.git/plain/regulatory.db
-wget https://git.kernel.org/pub/scm/linux/kernel/git/wens/wireless-regdb.git/plain/regulatory.db.p7s
+
 make  olddefconfig 
 
 export KCFLAGS="-O2 -march=icelake-client  -pipe"
