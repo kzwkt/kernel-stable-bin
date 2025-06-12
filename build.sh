@@ -1,4 +1,4 @@
-ver=6.15.1
+ver=6.15.2
 echo $ver > ver
 kernel_url="https://cdn.kernel.org/pub/linux/kernel/v${ver%%.*}.x/linux-$ver.tar.xz"
 
